@@ -19,10 +19,12 @@ flowchart TD
     RGS[/Regions/]
     POI[/POIs/]
     LIDAR_RNG[/Lidar Range/]
+    DUST_FREQ[/Dust timeseries freq/]
     EVPRM[/Event Detection Parameters/]
 
     %% Process LIDAR data
     LIDAR --> LDRPRC[Lidar Processing]
+    DUST_FREQ --> LDRPRC
     LIDAR_RNG --> LDRPRC
     LDRPRC --> NSDST
 
@@ -53,4 +55,8 @@ flowchart TD
     %% style those elements which exist
     style NSDST fill:#00758f
     style VIS fill:#00758f
+    style LIDAR_RNG fill:#00758f
+    style LIDAR fill:#00758f
+    style DUST_FREQ fill:#00758f
+    style LDRPRC fill:#00758f
 ```
