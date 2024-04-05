@@ -47,4 +47,11 @@ flowchart TD
     DST_Events --> EV_COMP[Event Composites]
     CHL --> EV_COMP
     EV_COMP --> CHL_Comp
+
+    %% style those elements which exist
+    style NSDST fill:#00758f
+    style LIDAR_RNG fill:#00758f
+    style LIDAR fill:#00758f
+    style DUST_FREQ fill:#00758f
+    style LDRPRC fill:#00758f
 ```
