@@ -1,5 +1,9 @@
 # Cabo-Verde-Dust
 
+Prelim deployment is here: <https://dust-visualization-yyeqv6w6dq-nw.a.run.app>
+
+## Structure
+
 ```mermaid
 flowchart TD
     %% datasets
@@ -50,6 +54,7 @@ flowchart TD
 
     %% style those elements which exist
     style NSDST fill:#00758f
+    style VIS fill:#00758f
     style LIDAR_RNG fill:#00758f
     style LIDAR fill:#00758f
     style DUST_FREQ fill:#00758f
