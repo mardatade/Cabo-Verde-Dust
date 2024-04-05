@@ -1,5 +1,9 @@
 # Cabo-Verde-Dust
 
+Prelim deployment is here: <https://dust-visualization-yyeqv6w6dq-nw.a.run.app>
+
+## Structure
+
 ```mermaid
 flowchart TD
     %% datasets
