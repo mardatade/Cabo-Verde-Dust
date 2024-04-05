@@ -49,4 +49,8 @@ flowchart TD
     DST_Events --> EV_COMP[Event Composites]
     CHL --> EV_COMP
     EV_COMP --> CHL_Comp
+
+    %% style those elements which exist
+    style NSDST fill:#00758f
+    style VIS fill:#00758f
 ```
