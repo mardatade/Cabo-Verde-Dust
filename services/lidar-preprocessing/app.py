@@ -212,6 +212,20 @@ def get_near_surface_dust(ds, resample_to=None, range_min=None, range_max=None):
     help="Max number of files to be read.",
 )
 def main(frequency, range_min, range_max, num_files):
+    """Run the preprocessing.
+    
+    Steps:
+    - "logging"
+    - try: read existing dust timeseries, read cloudnet metadata, crop metadata file 
+      to only those days that are not completely covered by the existing
+      timeseries
+    - if this fails: Just use all metadata
+    - download lidar dataset (resampling and forgetting raw data long the way to save memory)
+    - generate new dust timeseries
+    - concat to existing dust timeseries
+    - write to either local or cloud storage
+    - some more "logging"
+    """
     print("Resampling to --", frequency)
     print("Range from", range_min, "to", range_max)
 
