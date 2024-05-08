@@ -20,7 +20,7 @@ def visualize_dust(df_dust, standardize=False):
     """Simplest possible plot."""
     if standardize:
         df_dust = df_dust / df_dust.max() * 100
-    return df_dust.hvplot(grid=True)
+    return df_dust.hvplot(grid=True, linewidth=5, color="brown")
 
 
 standardize_selector = pn.widgets.Select(options=[True, False], name="Standardize?")
