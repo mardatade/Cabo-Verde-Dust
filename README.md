@@ -57,6 +57,7 @@ flowchart TD
     style VIS fill:#99ddff
     style LIDAR_RNG fill:#99ddff
     style LIDAR fill:#99ddff
+    style CHL fill:#99ddff
     style DUST_FREQ fill:#99ddff
     style LDRPRC fill:#99ddff
 ```

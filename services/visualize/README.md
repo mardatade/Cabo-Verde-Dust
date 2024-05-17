@@ -1,6 +1,6 @@
 # Simple Dust Visualisation
 
-Loads automatically updated `dust.csv` from cloud storage and creates an interactive plot which then can be served using panel running in a Docker container.
+Loads automatically updated `dust.csv` and CHLa data from cloud storage and creates an interactive plot which then can be served using panel running in a Docker container.
 
 ## Deployment
 
