@@ -1,9 +1,6 @@
-click
 copernicusmarine
 fsspec
 gcsfs
 netcdf4
-pandas
-pooch
 xarray
 zarr
