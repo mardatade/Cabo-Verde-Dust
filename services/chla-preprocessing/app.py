@@ -26,11 +26,11 @@ def load_write_CHL(dataset_id=None, lon_bounds=None, lat_bounds=None, output_nam
 
     chldataset = chldataset[["CHL"]]
 
-    chldataset.to_netcdf(output_name)
+    chldataset.to_zarr(output_name, consolidated=True)
 
 
 def get_output_name(dataset_id=None):
-    return dataset_id + ".nc"
+    return dataset_id + ".zarr"
 
 
 @click.command()

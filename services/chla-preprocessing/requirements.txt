@@ -6,3 +6,4 @@ netcdf4
 pandas
 pooch
 xarray
+zarr
