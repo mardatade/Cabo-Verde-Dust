@@ -1,0 +1,6 @@
+copernicusmarine
+fsspec
+gcsfs
+netcdf4
+xarray
+zarr

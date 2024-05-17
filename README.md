@@ -53,10 +53,11 @@ flowchart TD
     EV_COMP --> CHL_Comp
 
     %% style those elements which exist
-    style NSDST fill:#00758f
-    style VIS fill:#00758f
-    style LIDAR_RNG fill:#00758f
-    style LIDAR fill:#00758f
-    style DUST_FREQ fill:#00758f
-    style LDRPRC fill:#00758f
+    style NSDST fill:#99ddff
+    style VIS fill:#99ddff
+    style LIDAR_RNG fill:#99ddff
+    style LIDAR fill:#99ddff
+    style CHL fill:#99ddff
+    style DUST_FREQ fill:#99ddff
+    style LDRPRC fill:#99ddff
 ```
