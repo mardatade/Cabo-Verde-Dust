@@ -12,6 +12,10 @@ from fsspec.implementations.local import LocalFileSystem
 from fsspec.implementations.dirfs import DirFileSystem
 from pathlib import Path
 import os
+import xarray as xr
+from datetime import date, timedelta
+
+
 
 GCS_BUCKET = "2024-mardata-oscm-dust"
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT_ID", None)
@@ -29,9 +33,7 @@ def get_remote_filesystem():
 
 
 
-
-
-def load_write_AD(dataset_id=None, lon_bounds=None, lat_bounds=None, output_fs=None, ads_filename_nc=None):
+def load_write_ADS(dataset_id=None, lon_bounds=None, lat_bounds=None, output_fs=None, ads_filename_grib=None):
     area = [
         lat_bounds[1],  # north
         lon_bounds[0],  # west
@@ -41,68 +43,101 @@ def load_write_AD(dataset_id=None, lon_bounds=None, lat_bounds=None, output_fs=N
     
     c = cdsapi.Client()
     
-    
+    # get data from 01.01.2021 to previous day
+    today = date.today()
+    prevday = str(today- timedelta(days=1))
+    print(prevday)
+    #prevday = "2024-06-19"
+    #print(prevday)
+
     
     # Make sure to accept the terms and conditions on the CDS website before retrieval
+    #'particulate matter_10um', 'particulate_matter_1um',
+    cdsapi.Client()
+
+    variables = ['dust_aerosol_optical_depth_550nm', 
+        'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm', 'total_aerosol_optical_depth_550nm',
+        'total_aerosol_optical_depth_670nm', 'total_aerosol_optical_depth_865nm']
+    """
     c.retrieve(
-        dataset_id,
-        {
-            'variable': [
-                'dust_aerosol_0.03-0.55um_mixing_ratio', 'dust_aerosol_0.55-0.9um_mixing_ratio', 'dust_aerosol_0.9-20um_mixing_ratio',
-                'dust_aerosol_optical_depth_550nm', 'particulate_matter_10um', 'particulate_matter_1um',
-                'particulate_matter_2.5um', 'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm',
-                'total_aerosol_optical_depth_550nm', 'total_aerosol_optical_depth_670nm', 'total_aerosol_optical_depth_865nm',
-            ],
-            'pressure_level': '1',
-            'model_level': '1',
-            'date': '2023-10-01/2023-12-01',
-            'time': [
-                '00:00', '03:00', '06:00',
-                '09:00', '12:00', '15:00',
-                '18:00', '21:00',
-            ],
-            'area': area,
-            'format': 'netcdf',
-        },
-        ads_filename_nc
-    )
-    # chldataset = chldataset.sel(
-    #     longitude=slice(*lon_bounds), latitude=slice(*lat_bounds)
-    # )
-
-    chldataset = chldataset[["CHL"]]
-
-    if output_fs is None:
-        chldataset.to_zarr(f"{dataset_id}.zarr/", mode="w")
-    else:
-        chldataset.to_zarr(
-            output_fs.get_mapper(f"{GCS_BUCKET}/{dataset_id}.zarr/"),
-            consolidated=True,
-            mode="w",
-        )
-
-
-
-
-
-
-
+    'cams-global-atmospheric-composition-forecasts',
+    {
+        'date': '2021-01-01/'+prevday,
+        'type': 'forecast',
+        'format': 'grib',
+        'variable': [
+                'dust_aerosol_optical_depth_550nm', 
+        'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm', 'total_aerosol_optical_depth_550nm',
+        'total_aerosol_optical_depth_670nm', 'total_aerosol_optical_depth_865nm'
+        ],
+        'time': [
+            '00:00', '12:00',
+        ],
+        'leadtime_hour': '0',
+        'area': [
+            22, -28, 8,
+            -12,
+        ],
+    },
+    'download_test_big.grib')
+    """
+    c.retrieve(
+    'cams-global-atmospheric-composition-forecasts',
+    {
+        'date': '2021-01-01/'+prevday,
+        'type': 'forecast',
+        'format': 'grib',
+        'variable': [
+            'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm', 'total_aerosol_optical_depth_670nm',
+        ],
+        'time': [
+            '00:00', '12:00',
+        ],
+        'leadtime_hour': '0',
+        'area': [
+            22, -28, 8,
+            -12,
+        ],
+    },
+    ads_filename_grib)
 
 
+    return xr.load_dataset(ads_filename_grib, engine = "cfgrib", filter_by_keys={'typeOfLevel': 'hybrid'}) 
+
+
+#########################
+# Other possible parameters:
+
+#, 'dust_aerosol_0.55-0.9um_mixing_ratio', 'dust_aerosol_0.9-20um_mixing_ratio',
+#'dust_aerosol_optical_depth_550nm', 'particulate_matter_10um', 'particulate_matter_1um',
+#'particulate_matter_2.5um', 'total_aerosol_optical_depth_1240nm', 'total_aerosol_optical_depth_469nm',
+#'total_aerosol_optical_depth_550nm', 'total_aerosol_optical_depth_670nm', 'total_aerosol_optical_depth_865nm',
+
+# TO DO :
+# How to individually download the paramteres(because of large size constraint) and stich the grib files together?
+
+# https://ads.atmosphere.copernicus.eu/cdsapp#!/dataset/cams-global-atmospheric-composition-forecasts?tab=form
+
+###########################
 
 if __name__ == "__main__":
 
-    CMEMS_USER = os.environ["CMEMS_USER"]
-    CMEMS_PASS = os.environ["CMEMS_PASS"]
+    #CMEMS_USER = os.environ["CMEMS_USER"]
+    #CMEMS_PASS = os.environ["CMEMS_PASS"]
 
     fs = get_remote_filesystem()
     
-    ads_filename_nc = "dust_ads.nc"
+    ads_filename_grib = "dust_ads.grib"
 
-    load_write_CHL(
+    loaded_xr = load_write_ADS(
         dataset_id=DATASET_ID,
         lon_bounds=LON_BOUNDS,
         lat_bounds=LAT_BOUNDS,
-        output_fs=fs
-        ads_filename_nc = ads_filename_nc,
+        output_fs=fs,
+        ads_filename_grib = ads_filename_grib,
     )
+
+
+
+
+
